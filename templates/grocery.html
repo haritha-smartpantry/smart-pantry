@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Pantry - Smart Pantry</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+
+    <div class="logo">
+        🛒 Smart Pantry
+    </div>
+
+    <div>
+        <a href="/">🏠 Home</a>
+        <a href="/grocery">🛒 My Pantry</a>
+        <a href="/recipes">🍳 Recipes</a>
+    </div>
+
+</nav>
+
+<div class="container">
+
+    <h1>🛒 My Pantry</h1>
+
+    <p>
+        Manage your grocery items, quantities and expiry dates in one place.
+    </p>
+
+    <h2>➕ Add Grocery Item</h2>
+
+    <form method="POST">
+
+        <label>Item Name:</label><br>
+        <input type="text" name="item_name"
+               placeholder="e.g. Rice" required>
+
+        <br>
+
+        <label>Category:</label><br>
+        <input type="text" name="category"
+               placeholder="e.g. Grains" required>
+
+        <br>
+
+        <label>Quantity:</label><br>
+        <input type="number" name="quantity"
+               placeholder="e.g. 5" required>
+
+        <br>
+
+        <label>Expiry Date:</label><br>
+        <input type="date" name="expiry_date" required>
+
+        <br><br>
+
+        <button type="submit">➕ Add Item</button>
+
+    </form>
+
+
+    <h2>📦 My Pantry Items</h2>
+
+    {% if expiry_alerts > 0 %}
+
+<div class="alert-box">
+
+    <h3>⚠️ Expiry Alert</h3>
+
+    <p>
+        You have <strong>{{ expiry_alerts }}</strong>
+        grocery item(s) that need your attention.
+    </p>
+
+    <p>
+        Check the items marked 🔴 Expired or 🟡 Expiring Soon.
+    </p>
+
+</div>
+
+{% else %}
+
+<div class="success-box">
+
+    <h3>✅ Pantry Looks Good!</h3>
+
+    <p>
+        No grocery items are currently expired or expiring soon.
+    </p>
+
+</div>
+
+{% endif %}
+
+    {% if items %}
+
+    <table>
+
+        <tr>
+            <th>Item Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Expiry Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for item in items %}
+
+        <tr>
+
+            <td>{{ item.item_name }}</td>
+
+            <td>{{ item.category }}</td>
+
+            <td>{{ item.quantity }}</td>
+
+            <td>{{ item.expiry_date }}</td>
+
+            <td>
+
+                {% if item.status == "Expired" %}
+
+                    🔴 Expired
+
+                {% elif item.status == "Expiring Soon" %}
+
+                    🟡 Expiring Soon
+
+                {% else %}
+
+                    🟢 Fresh
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                <a href="/edit/{{ item._id }}">✏️ Edit</a>
+                |
+                <a href="/delete/{{ item._id }}">🗑️ Delete</a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <div class="recipe-card">
+
+        <h3>🛒 Your pantry is empty</h3>
+
+        <p>Add your first grocery item using the form above.</p>
+
+    </div>
+
+    {% endif %}
+
+
+    <br><br>
+
+    <a href="/recipes" class="back-button">
+        🍳 Recipe Synthesizer
+    </a>
+
+</div>
+
+</body>
+
+</html>

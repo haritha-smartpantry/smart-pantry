@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Smart Pantry | Recipes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🛒 Smart Pantry
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/grocery">My Pantry</a>
+        <a href="/recipes">Recipes</a>
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <h1>🍳 Recipe Synthesizer</h1>
+
+    <p>
+        Choose an ingredient that needs to be used soon
+        and find suitable recipes.
+    </p>
+
+
+    <!-- EXPIRING ITEMS -->
+
+    <h2>⚠️ Items Expiring Soon</h2>
+
+    {% if expiring_items %}
+
+        <div class="recipe-card">
+
+            <p>
+                Select an item to find recipes that use it.
+            </p>
+
+            {% for item in expiring_items %}
+
+            <div class="attention-item">
+
+                <div>
+
+                    <strong>
+                        🛒 {{ item.item_name }}
+                    </strong>
+
+                    <small>
+                        Expires: {{ item.expiry_date }}
+                    </small>
+
+                </div>
+
+                <a href="/recipes?item={{ item.item_name }}"
+                   class="back-button">
+
+                    🍳 Get Recipes
+
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="recipe-card">
+
+            <h3>✅ No items are expiring soon</h3>
+
+            <p>
+                Your pantry does not currently have
+                any items that need to be used soon.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- SELECTED ITEM -->
+
+    {% if selected_item %}
+
+    <h2>
+        🥗 Recipes for {{ selected_item }}
+    </h2>
+
+    {% if recipes %}
+
+        {% for recipe in recipes %}
+
+        <div class="recipe-card">
+
+            <h3>
+                🍳 {{ recipe.recipe_name }}
+            </h3>
+
+            <p>
+                <strong>🥕 Ingredients:</strong>
+                {{ recipe.ingredients | join(", ") }}
+            </p>
+
+            <p>
+                <strong>🛒 Available in your pantry:</strong>
+                {{ recipe.matched_ingredients | join(", ") }}
+            </p>
+
+            <p>
+                <strong>👨‍🍳 Instructions:</strong>
+                {{ recipe.instructions }}
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="recipe-card">
+
+            <h3>😔 No recipes found</h3>
+
+            <p>
+                We don't currently have a recipe using
+                {{ selected_item }}.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+    {% endif %}
+
+
+    <!-- EXPIRED ITEMS -->
+
+    {% if expired_items %}
+
+    <h2>🔴 Expired Items</h2>
+
+    <div class="alert-box">
+
+        <p>
+            The following items have already expired:
+        </p>
+
+        {% for item in expired_items %}
+
+        <p>
+            🔴 <strong>{{ item.item_name }}</strong>
+            — expired on {{ item.expiry_date }}
+        </p>
+
+        {% endfor %}
+
+        <p>
+            ⚠️ For food safety, expired items are not
+            recommended for cooking.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+    <a href="/grocery" class="back-button">
+        ← Back to My Pantry
+    </a>
+
+</div>
+
+</body>
+</html>

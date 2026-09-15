@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Grocery Item - Smart Pantry</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🛒 Smart Pantry
+    </div>
+
+    <div>
+        <a href="/">🏠 Home</a>
+        <a href="/grocery">🛒 My Pantry</a>
+        <a href="/recipes">🍳 Recipes</a>
+    </div>
+
+</nav>
+
+<div class="container">
+
+    <h1>✏️ Edit Grocery Item</h1>
+
+    <p>
+        Update the details of your grocery item below.
+    </p>
+
+    <form method="POST">
+
+        <label>Item Name:</label><br>
+
+        <input type="text"
+               name="item_name"
+               value="{{ item.item_name }}"
+               required>
+
+        <br>
+
+        <label>Category:</label><br>
+
+        <input type="text"
+               name="category"
+               value="{{ item.category }}"
+               required>
+
+        <br>
+
+        <label>Quantity:</label><br>
+
+        <input type="number"
+               name="quantity"
+               value="{{ item.quantity }}"
+               required>
+
+        <br>
+
+        <label>Expiry Date:</label><br>
+
+        <input type="date"
+               name="expiry_date"
+               value="{{ item.expiry_date }}"
+               required>
+
+        <br><br>
+
+        <button type="submit">
+            💾 Update Item
+        </button>
+
+    </form>
+
+    <a href="/grocery" class="back-button">
+        ← Back to My Pantry
+    </a>
+
+</div>
+
+</body>
+
+</html>

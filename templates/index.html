@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Pantry</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🛒 Smart Pantry
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/grocery">My Pantry</a>
+        <a href="/recipes">Recipes</a>
+    </div>
+
+</nav>
+
+
+<div class="home-container">
+
+    <!-- WELCOME -->
+
+    <div class="welcome-section">
+
+        <div>
+            <h1>Welcome back! 👋</h1>
+
+            <p>
+                Manage your groceries and keep your pantry fresh.
+            </p>
+        </div>
+
+        <a href="/grocery" class="add-grocery-btn">
+            + Add Grocery
+        </a>
+
+    </div>
+
+
+    <!-- MAIN DASHBOARD -->
+
+    <div class="home-grid">
+
+        <!-- ATTENTION -->
+
+        <div class="home-box attention-box">
+
+            <div class="box-heading">
+                <h2>⚠️ Needs Your Attention</h2>
+            </div>
+
+            {% if expiring_items > 0 or expired_items > 0 %}
+
+                {% for item in items %}
+
+                    {% if item.status == "Expired" or item.status == "Expiring Soon" %}
+
+                    <div class="attention-item">
+
+                        <div>
+                            <strong>{{ item.item_name }}</strong>
+
+                            <small>
+                                Expires: {{ item.expiry_date }}
+                            </small>
+                        </div>
+
+                        {% if item.status == "Expired" %}
+
+                            <span class="status expired">
+                                🔴 Expired
+                            </span>
+
+                        {% else %}
+
+                            <span class="status expiring">
+                                🟡 Soon
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+                <a href="/grocery" class="box-link">
+                    View Pantry →
+                </a>
+
+            {% else %}
+
+                <div class="no-alert">
+
+                    <span>✅</span>
+
+                    <p>
+                        No items need attention right now.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- PANTRY -->
+
+        <div class="home-box pantry-box">
+
+            <div class="box-heading">
+
+                <h2>📦 My Pantry</h2>
+
+                <a href="/grocery">
+                    View All →
+                </a>
+
+            </div>
+
+
+            {% if items %}
+
+            <div class="pantry-preview">
+
+                {% for item in items[:4] %}
+
+                <div class="pantry-item">
+
+                    <div class="pantry-item-top">
+
+                        <strong>
+                            {% if item.category|lower == "dairy" %}
+                                🥛
+                            {% elif item.category|lower == "fruits" %}
+                                🍎
+                            {% elif item.category|lower == "vegetables" %}
+                                🥕
+                            {% elif item.category|lower == "grains" %}
+                                🍚
+                            {% else %}
+                                🛒
+                            {% endif %}
+
+                            {{ item.item_name }}
+                        </strong>
+
+                    </div>
+
+                    <small>
+                        {{ item.quantity }} · {{ item.category }}
+                    </small>
+
+                    <div>
+
+                        {% if item.status == "Expired" %}
+
+                            <span class="status expired">
+                                🔴 Expired
+                            </span>
+
+                        {% elif item.status == "Expiring Soon" %}
+
+                            <span class="status expiring">
+                                🟡 Soon
+                            </span>
+
+                        {% else %}
+
+                            <span class="status fresh">
+                                🟢 Fresh
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="no-alert">
+
+                <span>🛒</span>
+
+                <p>
+                    Your pantry is empty.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- RECIPE -->
+
+    <div class="recipe-box">
+
+        <div>
+
+            <h2>🍳 What can I cook?</h2>
+
+            <p>
+                Find recipes using ingredients already in your pantry.
+            </p>
+
+        </div>
+
+        <a href="/recipes">
+            Find Recipes →
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
