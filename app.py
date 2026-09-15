@@ -1,11 +1,16 @@
 from flask import Flask, render_template, request, redirect
 from pymongo import MongoClient
 from datetime import datetime
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 
-# Connect to MongoDB
-client = MongoClient("mongodb://localhost:27017/")
+load_dotenv()
+
+mongo_uri = os.getenv("MONGO_URI")
+
+client = MongoClient(mongo_uri)
 
 # Select database
 db = client["smart_pantry"]
